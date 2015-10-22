@@ -13,6 +13,8 @@
  */
 package io.selendroid.server.model;
 
+import android.support.test.uiautomator.UiDevice;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,13 +52,20 @@ public class DefaultAppiumUiAutomatorDriver implements SelendroidDriver {
     private KeySender keySender = null;
     private Session session = null;
 
+    private UiDevice mDevice;
+
     public DefaultAppiumUiAutomatorDriver(ServerInstrumentation serverInstrumentation) {
         this.keySender = new InstrumentedKeySender(serverInstrumentation);
         this.serverInstrumentation = serverInstrumentation;
+        // An exception is thrown right here
+        mDevice = UiDevice.getInstance(serverInstrumentation);
     }
 
     @Override
     public AndroidElement findElement(By by) {
+        // Easier to debug at this method
+        // mDevice = UiDevice.getInstance(serverInstrumentation);
+        // mDevice.pressHome();
         throw new NoSuchMethodImplementationException(METHOD_NOT_IMPLMENTED_EXCEPTION);
     }
 
