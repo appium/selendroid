@@ -26,6 +26,7 @@ import java.util.Collections;
 public class AndroidSdk {
   public static final String ANDROID_FOLDER_PREFIX = "android-";
   public static final String ANDROID_HOME = "ANDROID_HOME";
+  public static String ANDROID_HOME_PATH = null;
 
   public static File adb() {
 
@@ -93,6 +94,8 @@ public class AndroidSdk {
 
   public static String androidHome() {
     String androidHome = System.getenv(ANDROID_HOME);
+
+    if (androidHome == null) androidHome = ANDROID_HOME_PATH;
 
     if (androidHome == null) {
       throw new SelendroidException("Environment variable '" + ANDROID_HOME + "' was not found!");
