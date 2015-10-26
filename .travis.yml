@@ -25,14 +25,31 @@ branches:
 
 before_install: 
   - "git clone -b travis `git config --get remote.origin.url` target/travis"
-  - "mvn --version"
-  - "cd third-party/"
-  - "./mvnInstall.sh"
-  - "cd ../"
 
 script: 
-  - "[ ${TRAVIS_PULL_REQUEST} = 'false' ] && mvn clean deploy --settings target/travis/settings.xml || mvn clean verify --settings target/travis/settings.xml"
-
+  - "cd android-driver"
+  - "gradle clean build"
+  - "cd .."
+  - "cd selendroid-client"
+  - "gradle clean build"
+  - "cd .."
+  - "cd selendroid-common"
+  - "gradle clean build"
+  - "cd .."
+  - "cd selendroid-grid-plugin"
+  - "gradle clean build"
+  - "cd .."
+  - "cd selendroid-server"
+  - "gradle clean build"
+  - "cd .."
+  - "cd selendroid-server-common"
+  - "gradle clean build"
+  - "cd .."
+  - "cd selendroid-standalone"
+  - "gradle clean build"
+  - "cd .."
+  - "cd selendroid-test-app"
+  - "gradle assembleDebug"
 
 env:
   global:
