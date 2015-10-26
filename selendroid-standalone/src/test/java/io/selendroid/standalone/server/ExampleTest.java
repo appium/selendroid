@@ -24,6 +24,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 
+import java.io.File;
+
 // test code from:
 // https://github.com/selendroid/demoproject-selendroid/blob/8aa982a3b15218a2dccb63fb56ed8425d53f9b8f/src/main/java/io/selendroid/demo/SelendroidIntegrationTest.java
 public class ExampleTest {
@@ -41,15 +43,19 @@ public class ExampleTest {
         if (selendroidServer != null) {
             selendroidServer.stopSelendroid();
         }
+
+        // using the apk generated with gradle build
+        String autPath = new File("src/test/resources/selendroid-test-app-debug.apk").getAbsolutePath();
+
         SelendroidConfiguration config = new SelendroidConfiguration();
         // NOTE: Must change path to be correct on your system.
         // TODO: make this relative and use the actual selendroid test apk.
-        config.addSupportedApp("/path/to/Guru99App.apk");
+        config.addSupportedApp(autPath);
         selendroidServer = new SelendroidLauncher(config);
         selendroidServer.launchSelendroid(); // Null Pointer Exception
 
         SelendroidCapabilities caps = new SelendroidCapabilities();
-        caps.setAut("com.guru99app:1.0");
+        caps.setAut("io.selendroid.testapp:0.17.0-SNAPSHOT");
         caps.setAutomationName("uiautomator");
 
         driver = new SelendroidDriver(caps);
