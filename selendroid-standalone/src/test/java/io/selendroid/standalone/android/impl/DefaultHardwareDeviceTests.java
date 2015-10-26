@@ -30,6 +30,7 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.http.HttpResponse;
 import org.junit.Assert;
 import org.junit.Test;
+import org.junit.Ignore;
 
 import java.io.File;
 
@@ -61,6 +62,7 @@ public class DefaultHardwareDeviceTests {
     Assert.assertFalse(installedAPKs.contains(AUT_PACKAGE));
   }
 
+  @Ignore("Fail. Requires an active emulator to install the selendroid apk.")
   @Test
   public void testShouldBeAbleToStartSelendroid() throws Exception {
     IDevice device = mock(IDevice.class);

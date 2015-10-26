@@ -1,0 +1,7 @@
+include 'android-driver'
+include 'selendroid-client'
+include 'selendroid-common'
+include 'selendroid-grid-plugin'
+include 'selendroid-server'
+include 'selendroid-server-common'
+include 'selendroid-standalone'

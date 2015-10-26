@@ -25,14 +25,13 @@ branches:
 
 before_install: 
   - "git clone -b travis `git config --get remote.origin.url` target/travis"
-  - "mvn --version"
-  - "cd third-party/"
-  - "./mvnInstall.sh"
-  - "cd ../"
+
+before_script:
+  - echo no | android create avd --force -n l10n -t android-16 --abi armeabi-v7a
 
 script: 
-  - "[ ${TRAVIS_PULL_REQUEST} = 'false' ] && mvn clean deploy --settings target/travis/settings.xml || mvn clean verify --settings target/travis/settings.xml"
-
+  - "gradle clean build"
+  - "gradle -p selendroid-test-app clean assembleDebug"
 
 env:
   global:

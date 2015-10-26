@@ -1,0 +1,14 @@
+apply plugin: 'java'
+
+dependencies {
+    compile 'org.json:json:20090211'
+    compile 'junit:junit:4.8.2'
+    compile('org.seleniumhq.selenium:selenium-java:2.48.2') {
+        exclude(module: 'selenium-htmlunit-driver')
+        exclude(module: 'selenium-chrome-driver')
+        exclude(module: 'selenium-firefox-driver')
+        exclude(module: 'selenium-ie-driver')
+        exclude(module: 'selenium-iphone-driver')
+        exclude(module: 'selenium-safari-driver')
+    }
+}
