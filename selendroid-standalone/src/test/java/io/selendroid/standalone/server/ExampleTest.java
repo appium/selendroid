@@ -18,11 +18,14 @@ import io.selendroid.common.SelendroidCapabilities;
 import io.selendroid.standalone.SelendroidConfiguration;
 import io.selendroid.standalone.SelendroidLauncher;
 import io.selendroid.standalone.android.AndroidSdk;
+
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.io.File;
 
@@ -52,13 +55,14 @@ public class ExampleTest {
         // TODO: make this relative and use the actual selendroid test apk.
         config.addSupportedApp(autPath);
         selendroidServer = new SelendroidLauncher(config);
-        selendroidServer.launchSelendroid(); // Null Pointer Exception
+        selendroidServer.launchSelendroid();
 
         SelendroidCapabilities caps = new SelendroidCapabilities();
         caps.setAut("io.selendroid.testapp:0.17.0-SNAPSHOT");
         caps.setAutomationName("uiautomator");
 
         driver = new SelendroidDriver(caps);
+        WebElement inputField = driver.findElement(By.id("my_text_field"));
     }
 
     @AfterClass

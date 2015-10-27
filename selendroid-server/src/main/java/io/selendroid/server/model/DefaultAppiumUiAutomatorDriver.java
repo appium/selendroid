@@ -58,14 +58,14 @@ public class DefaultAppiumUiAutomatorDriver implements SelendroidDriver {
         this.keySender = new InstrumentedKeySender(serverInstrumentation);
         this.serverInstrumentation = serverInstrumentation;
         // An exception is thrown right here
-        mDevice = UiDevice.getInstance(serverInstrumentation);
+//        mDevice = UiDevice.getInstance(serverInstrumentation);
     }
 
     @Override
     public AndroidElement findElement(By by) {
         // Easier to debug at this method
-        // mDevice = UiDevice.getInstance(serverInstrumentation);
-        // mDevice.pressHome();
+        mDevice = UiDevice.getInstance(serverInstrumentation);
+        mDevice.pressHome();
         throw new NoSuchMethodImplementationException(METHOD_NOT_IMPLMENTED_EXCEPTION);
     }
 
