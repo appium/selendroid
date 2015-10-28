@@ -1,5 +1,3 @@
-version = '0.17.0'
-
 apply plugin: 'java'
 apply plugin: 'application'
 
@@ -32,13 +30,13 @@ jar {
 
     // Version from manifest attributes will be retrieved while building selendroid-server apk
     manifest {
-        attributes('Main-Class': "$mainClassName", 'version': '0.18.0-SNAPSHOT')
+        attributes('Main-Class': "$mainClassName", 'version': version)
     }
 
     into('prebuild') {
         from {
-            ['../selendroid-server/build/outputs/apk/selendroid-server-0.18.0-SNAPSHOT.apk',
-             '../android-driver/build/outputs/apk/android-driver-app-0.18.0-SNAPSHOT.apk']
+            ['../selendroid-server/build/outputs/apk/selendroid-server-' + version + '.apk',
+             '../android-driver/build/outputs/apk/android-driver-app-' + version + '.apk']
         }
     }
 
