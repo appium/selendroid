@@ -27,29 +27,8 @@ before_install:
   - "git clone -b travis `git config --get remote.origin.url` target/travis"
 
 script: 
-  - "cd android-driver"
   - "gradle clean build"
-  - "cd .."
-  - "cd selendroid-client"
-  - "gradle clean build"
-  - "cd .."
-  - "cd selendroid-common"
-  - "gradle clean build"
-  - "cd .."
-  - "cd selendroid-grid-plugin"
-  - "gradle clean build"
-  - "cd .."
-  - "cd selendroid-server"
-  - "gradle clean build"
-  - "cd .."
-  - "cd selendroid-server-common"
-  - "gradle clean build"
-  - "cd .."
-  - "cd selendroid-standalone"
-  - "gradle clean build"
-  - "cd .."
-  - "cd selendroid-test-app"
-  - "gradle assembleDebug"
+  - "gradle -p selendroid-test-app clean assembleDebug"
 
 env:
   global:
