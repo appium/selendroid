@@ -63,6 +63,7 @@ sourceSets {
 dependencies {
     compile project(':selendroid-server-common')
     compile 'org.json:json:20090211'
+    compile 'com.android.support:support-v4:23.0.1'
     testCompile 'org.json:json:20090211'
     testCompile 'junit:junit:4.12'
     testCompile 'org.mockito:mockito-core:1.9.5'
@@ -72,5 +73,5 @@ dependencies {
 
     provided files('../third-party/cordova-3.7.0/classes.jar')
     provided files('../third-party/cordova-4.0.0/classes.jar')
-    provided files('../third-party/support-v4/classes.jar')
+
 }
