@@ -1,9 +1,5 @@
 apply plugin: 'java'
 
-repositories {
-    jcenter()
-}
-
 dependencies {
     compile 'org.seleniumhq.selenium:selenium-server:2.45.0'
 }

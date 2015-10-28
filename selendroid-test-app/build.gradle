@@ -7,10 +7,6 @@ buildscript {
     }
 }
 
-repositories {
-    jcenter()
-}
-
 apply plugin: 'com.android.application'
 
 dependencies {

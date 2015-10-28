@@ -1,9 +1,5 @@
 apply plugin: 'java'
 
-repositories {
-    jcenter()
-}
-
 dependencies {
     compile 'org.json:json:20090211'
     compile 'io.netty:netty-all:4.0.21.Final'
