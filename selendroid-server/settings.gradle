@@ -1,2 +1,0 @@
-include ':selendroid-server-common'
-project(':selendroid-server-common').projectDir = file("$rootDir/../selendroid-server-common")
