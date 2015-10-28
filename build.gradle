@@ -2,8 +2,5 @@ allprojects {
     repositories {
         jcenter()
     }
-}
-
-project('selendroid-standalone') {
     version = '0.18.0-SNAPSHOT'
 }
