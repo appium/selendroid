@@ -13,8 +13,6 @@
  */
 package io.selendroid.standalone.android.impl;
 
-import io.selendroid.standalone.android.impl.AbstractDevice;
-
 import org.apache.commons.exec.CommandLine;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
@@ -25,7 +23,10 @@ import org.junit.Ignore;
 import java.util.regex.Pattern;
 
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.argThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class AbstractDeviceTest {
   private static final Matcher<CommandLine> matchesCmdLine(final String cmdString) {
