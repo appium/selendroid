@@ -26,7 +26,6 @@ branches:
 before_install: 
   - "git clone -b travis `git config --get remote.origin.url` target/travis"
 
-
 before_script:
   - echo no | android create avd --force -n l10n -t android-16 --abi armeabi-v7a
 
