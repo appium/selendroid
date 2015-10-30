@@ -13,10 +13,20 @@ dependencies {
     compile 'com.android.tools.ddms:ddmlib:23.0.1'
     compile 'com.google.guava:guava:17.0'
     compile 'org.apache.commons:commons-lang3:3.1'
-    compile('org.seleniumhq.selenium:selenium-java:2.47.2') {
+    // see deps to exclude by visiting:
+    // https://bintray.com/bintray/jcenter/org.seleniumhq.selenium%3Aselenium-java/2.48.2/view#files
+    compile("org.seleniumhq.selenium:selenium-java:$rootProject.ext.selenium_version") {
+        exclude(module: 'selenium-chrome-driver')
+        exclude(module: 'selenium-edge-driver')
         exclude(module: 'selenium-htmlunit-driver')
+        exclude(module: 'selenium-firefox-driver')
+        exclude(module: 'selenium-ie-driver')
+        exclude(module: 'selenium-safari-driver')
+        // exclude(module: 'selenium-support')
+        exclude(module: 'webbit')
+        exclude(module: 'selenium-leg-rc')
     }
-    testCompile 'junit:junit:4.12'
+    testCompile rootProject.ext.junit
     testCompile 'org.mockito:mockito-core:1.9.5'
     testCompile 'org.hamcrest:hamcrest-all:1.3'
 }
