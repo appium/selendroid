@@ -1,3 +1,8 @@
+// must override project name to 'droiddriver'. otherwise the root folder name will
+// be used in jcenter and that could be named anything.
+// see http://gradle.org/docs/current/userguide/maven_plugin.html
+rootProject.name = 'selendroid'
+
 include 'android-driver'
 include 'selendroid-client'
 include 'selendroid-common'
