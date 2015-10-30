@@ -31,7 +31,6 @@ before_script:
 
 script: 
   - "gradle clean build"
-  - "gradle -p selendroid-test-app clean assembleDebug"
 
 env:
   global:

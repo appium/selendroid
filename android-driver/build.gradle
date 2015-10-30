@@ -4,7 +4,7 @@ buildscript {
     }
     dependencies {
         classpath rootProject.ext.android_build_tools_gradle
-        classpath 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
+        classpath rootProject.ext.sdkmanager
     }
 }
 
@@ -16,8 +16,8 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 10
-        targetSdkVersion 16
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
     }
 
     lintOptions {

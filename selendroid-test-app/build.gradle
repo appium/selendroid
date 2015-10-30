@@ -7,10 +7,6 @@ buildscript {
     }
 }
 
-repositories {
-    jcenter()
-}
-
 apply plugin: 'com.android.application'
 
 dependencies {
@@ -31,8 +27,8 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 10
-        targetSdkVersion 16
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
     }
 
     adbOptions {

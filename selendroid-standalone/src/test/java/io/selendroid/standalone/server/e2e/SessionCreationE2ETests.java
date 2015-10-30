@@ -13,11 +13,6 @@
  */
 package io.selendroid.standalone.server.e2e;
 
-import io.selendroid.common.SelendroidCapabilities;
-import io.selendroid.common.device.DeviceTargetPlatform;
-
-import java.net.URL;
-
 import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -27,6 +22,11 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.RemoteWebDriver;
+
+import java.net.URL;
+
+import io.selendroid.common.SelendroidCapabilities;
+import io.selendroid.common.device.DeviceTargetPlatform;
 
 /*
  * Test is currently only executed in manual mode
