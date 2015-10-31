@@ -1,7 +1,5 @@
 apply plugin: 'java'
 
 dependencies {
-    // see deps to exclude by visiting:
-    // https://bintray.com/bintray/jcenter/org.seleniumhq.selenium%3Aselenium-java/2.48.2/view#files
     compile("org.seleniumhq.selenium:selenium-server:$rootProject.ext.selenium_version")
 }
