@@ -17,6 +17,8 @@ allprojects {
         buildToolsVersion = '23.0.2'
         minSdkVersion = 10
         targetSdkVersion = 16
+        sourceCompatibilityVersion = 1.7
+        targetCompatibilityVersion = 1.7
         junit = 'junit:junit:4.12'
     }
 }
