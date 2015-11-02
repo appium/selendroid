@@ -3,7 +3,7 @@ sourceCompatibility = 1.7
 targetCompatibility = 1.7
 
 dependencies {
-    compile 'org.json:json:20090211'
+    compile rootProject.ext.json
     compile 'io.netty:netty-all:4.0.21.Final'
     testCompile rootProject.ext.junit
 }

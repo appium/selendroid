@@ -6,12 +6,13 @@ allprojects {
     version = '0.18.0-SNAPSHOT'
 
     ext {
+        json = 'org.json:json:20090211'
         // https://bintray.com/android/android-tools/com.android.tools.build.gradle/view
-        android_build_tools_gradle = 'com.android.tools.build:gradle:1.4.0-beta6'
+        androidBuildToolsGradle = 'com.android.tools.build:gradle:1.4.0-beta6'
         // https://bintray.com/bintray/jcenter/com.jakewharton.sdkmanager:gradle-plugin
         sdkmanager = 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
         // https://bintray.com/bintray/jcenter/org.seleniumhq.selenium%3Aselenium-java/
-        selenium_version = '2.48.2'
+        seleniumVersion = '2.48.2'
         compileSdkVersion = 23
         buildToolsVersion = '23.0.2'
         minSdkVersion = 10
