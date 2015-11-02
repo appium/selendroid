@@ -3,8 +3,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath rootProject.ext.android_build_tools_gradle
-        classpath rootProject.ext.sdkmanager
+        classpath rootProject.ext.androidBuildToolsGradle
+        classpath rootProject.ext.sdkManager
     }
 }
 

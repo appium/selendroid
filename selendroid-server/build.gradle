@@ -3,8 +3,8 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath rootProject.ext.android_build_tools_gradle
-        classpath rootProject.ext.sdkmanager
+        classpath rootProject.ext.androidBuildToolsGradle
+        classpath rootProject.ext.sdkManager
     }
 }
 
@@ -62,9 +62,8 @@ sourceSets {
 
 dependencies {
     compile project(':selendroid-server-common')
-    compile 'org.json:json:20090211'
     compile 'com.android.support:support-v4:23.1.0'
-    testCompile 'org.json:json:20090211'
+    testCompile rootProject.ext.json
     testCompile rootProject.ext.junit
     testCompile 'org.mockito:mockito-core:1.9.5'
     testCompile 'commons-io:commons-io:2.2'

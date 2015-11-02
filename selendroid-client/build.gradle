@@ -1,10 +1,9 @@
 apply plugin: 'java'
 
 dependencies {
-    compile 'org.seleniumhq.selenium:selenium-java:2.48.2'
     // see deps to exclude by visiting:
     // https://bintray.com/bintray/jcenter/org.seleniumhq.selenium%3Aselenium-java/2.48.2/view#files
-    compile("org.seleniumhq.selenium:selenium-java:$rootProject.ext.selenium_version") {
+    compile("org.seleniumhq.selenium:selenium-java:$rootProject.ext.seleniumVersion") {
         exclude(module: 'selenium-chrome-driver')
         exclude(module: 'selenium-edge-driver')
         exclude(module: 'selenium-htmlunit-driver')
