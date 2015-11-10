@@ -1,3 +1,17 @@
+buildscript {
+    ext.bintrayUser = project.hasProperty('bintrayUser') ? project.bintrayUser : System.getenv('BINTRAY_USER')
+    ext.bintrayKey = project.hasProperty('bintrayKey') ? project.bintrayKey : System.getenv('BINTRAY_KEY')
+    ext.bintrayEnabled = project.bintrayUser && project.bintrayKey
+
+    if (bintrayEnabled) {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1'
+    }
+}
+
+apply from: 'properties.gradle'
+group = selGroup
+version = selVersion
+
 allprojects {
     repositories {
         jcenter()
@@ -20,5 +34,33 @@ allprojects {
         sourceCompatibilityVersion = 1.7
         targetCompatibilityVersion = 1.7
         junit = 'junit:junit:4.12'
+    }
+}
+
+if (bintrayEnabled) {
+    apply from: 'jcenter.gradle'
+    allprojects {
+        apply plugin: 'com.jfrog.bintray'
+    }
+// https://github.com/bintray/bintray-examples/blob/master/gradle-multi-example/build.gradle
+    subprojects {
+        apply plugin: 'maven'
+
+        if (project.plugins.hasPlugin('java')) {
+            task sourceJar(type: Jar) {
+                classifier = 'sources'
+                from sourceSets.main.allSource
+            }
+            task javadocJar(type: Jar, dependsOn: javadoc) {
+                classifier = 'javadoc'
+                from javadoc.destinationDir
+            }
+
+            // Add the sourceJars to non-extractor modules
+            artifacts {
+                archives sourceJar
+                archives javadocJar
+            }
+        }
     }
 }
