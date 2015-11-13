@@ -1,23 +1,28 @@
 buildscript {
+    repositories {
+        jcenter()
+    }
+
     ext.bintrayUser = project.hasProperty('bintrayUser') ? project.bintrayUser : System.getenv('BINTRAY_USER')
     ext.bintrayKey = project.hasProperty('bintrayKey') ? project.bintrayKey : System.getenv('BINTRAY_KEY')
     ext.bintrayEnabled = project.bintrayUser && project.bintrayKey
 
-    if (bintrayEnabled) {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.1'
+    dependencies {
+        if (bintrayEnabled) {
+            classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
+        }
     }
 }
 
 apply from: 'properties.gradle'
 group = selGroup
-version = selVersion
 
 allprojects {
     repositories {
         jcenter()
     }
 
-    version = '0.18.0-SNAPSHOT'
+    version = selVersion
 
     ext {
         // https://bintray.com/android/android-tools/com.android.tools.build.gradle/view
@@ -35,32 +40,53 @@ allprojects {
         targetCompatibilityVersion = 1.7
         junit = 'junit:junit:4.12'
     }
-}
 
-if (bintrayEnabled) {
-    apply from: 'jcenter.gradle'
-    allprojects {
+    // Bintray script
+    if (bintrayEnabled) {
         apply plugin: 'com.jfrog.bintray'
+        bintray {
+            configurations = ['published', 'archives']
+            user = bintrayUser
+            key = bintrayKey
+            pkg {
+                repo = 'maven'
+                name = "selendroid"
+                websiteUrl = selWebsite
+                issueTrackerUrl = selTracker
+                vcsUrl = selGit
+                desc = selDescription
+                licenses = ['Apache-2.0']
+                version {
+                    name = "0.18.0-SNAPSHOT"
+                    desc = selDescription
+                }
+            }
+        }
     }
-// https://github.com/bintray/bintray-examples/blob/master/gradle-multi-example/build.gradle
-    subprojects {
-        apply plugin: 'maven'
 
-        if (project.plugins.hasPlugin('java')) {
-            task sourceJar(type: Jar) {
-                classifier = 'sources'
-                from sourceSets.main.allSource
-            }
-            task javadocJar(type: Jar, dependsOn: javadoc) {
-                classifier = 'javadoc'
-                from javadoc.destinationDir
-            }
+    configurations {
+        published
+    }
 
-            // Add the sourceJars to non-extractor modules
-            artifacts {
-                archives sourceJar
-                archives javadocJar
-            }
+    plugins.withType(JavaPlugin) {
+        // manifest.mainAttributes(provider: 'gradle')
+        configurations {
+            published
+        }
+
+        task sourceJar(type: Jar) {
+            classifier = 'sources'
+            from sourceSets.main.allSource
+        }
+        task javadocJar(type: Jar) {
+            classifier = 'javadoc'
+            from javadoc.destinationDir
+        }
+
+        // Add the sourceJars to non-extractor modules
+        artifacts {
+            published sourceJar
+            published javadocJar
         }
     }
 }
