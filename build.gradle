@@ -26,7 +26,7 @@ allprojects {
 
     ext {
         // https://bintray.com/android/android-tools/com.android.tools.build.gradle/view
-        androidBuildToolsGradle = 'com.android.tools.build:gradle:1.5.0'
+        androidBuildToolsGradle = 'com.android.tools.build:gradle:1.3.1'
         // https://bintray.com/bintray/jcenter/com.jakewharton.sdkmanager:gradle-plugin
         sdkManager = 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
         // https://bintray.com/bintray/jcenter/org.json%3Ajson/20090211/view
@@ -50,14 +50,15 @@ allprojects {
             key = bintrayKey
             pkg {
                 repo = 'maven'
-                name = "selendroid"
+                name = "${selGroup}:${selArtifactId}"
+                userOrg = 'appium'
                 websiteUrl = selWebsite
                 issueTrackerUrl = selTracker
                 vcsUrl = selGit
                 desc = selDescription
                 licenses = ['Apache-2.0']
                 version {
-                    name = "0.18.0-SNAPSHOT"
+                    name = selVersion
                     desc = selDescription
                 }
             }
@@ -67,7 +68,7 @@ allprojects {
     configurations {
         published
     }
-
+    apply plugin: 'maven'
     plugins.withType(JavaPlugin) {
         // manifest.mainAttributes(provider: 'gradle')
         configurations {
