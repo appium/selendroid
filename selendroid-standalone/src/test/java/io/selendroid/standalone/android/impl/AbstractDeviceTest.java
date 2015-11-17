@@ -45,6 +45,7 @@ public class AbstractDeviceTest {
     };
   }
 
+
   @Test
   public void testGetCrashLogContents() {
     AbstractDevice device = mock(AbstractDevice.class);

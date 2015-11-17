@@ -20,6 +20,32 @@ import com.android.ddmlib.TimeoutException;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.ObjectArrays;
+
+import org.apache.commons.exec.CommandLine;
+import org.apache.commons.exec.DefaultExecuteResultHandler;
+import org.apache.commons.exec.DefaultExecutor;
+import org.apache.commons.exec.ExecuteWatchdog;
+import org.apache.commons.exec.PumpStreamHandler;
+import org.apache.commons.io.IOUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.logging.LogEntry;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import javax.imageio.ImageIO;
+
 import io.selendroid.common.SelendroidCapabilities;
 import io.selendroid.server.common.exceptions.SelendroidException;
 import io.selendroid.server.common.model.ExternalStorageFile;
@@ -30,25 +56,6 @@ import io.selendroid.standalone.exceptions.AndroidDeviceException;
 import io.selendroid.standalone.exceptions.AndroidSdkException;
 import io.selendroid.standalone.exceptions.ShellCommandException;
 import io.selendroid.standalone.io.ShellCommand;
-import org.apache.commons.exec.*;
-import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.logging.LogEntry;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public abstract class AbstractDevice implements AndroidDevice {
   private static final Logger log = Logger.getLogger(AbstractDevice.class.getName());
@@ -67,7 +74,7 @@ public abstract class AbstractDevice implements AndroidDevice {
    * Constructor meant to be used with Android Emulators because a reference to the {@link IDevice}
    * will become available if the emulator will be started. Please make sure that #setIDevice is
    * called on the emulator.
-   * 
+   *
    * @param serial
    */
   public AbstractDevice(String serial) {
@@ -77,7 +84,7 @@ public abstract class AbstractDevice implements AndroidDevice {
   /**
    * Constructor mean to be used with Android Hardware devices because a reference to the
    * {@link IDevice} will be available immediately after they are connected.
-   * 
+   *
    * @param device
    */
   public AbstractDevice(IDevice device) {
@@ -127,13 +134,8 @@ public abstract class AbstractDevice implements AndroidDevice {
 
   @Override
   public void install(AndroidApp app) throws AndroidSdkException {
-    // Uninstall if already installed
-    if (isInstalled(app)) {
-      uninstall(app);
-    }
-    // -r: replace existing application
-    // -d: allow version code downgrade
-    CommandLine command = adbCommand("install", "-rd", app.getAbsolutePath());
+    // Reinstall if already installed, Install otherwise
+    CommandLine command = adbCommand("install", "-r", app.getAbsolutePath());
 
     String out = executeCommandQuietly(command, COMMAND_TIMEOUT * 6);
     try {
@@ -154,8 +156,8 @@ public abstract class AbstractDevice implements AndroidDevice {
 
     String mainActivity = app.getMainActivity().replace(app.getBasePackage(), "");
     CommandLine command =
-        adbCommand("shell", "am", "start", "-a", "android.intent.action.MAIN", "-n",
-            app.getBasePackage() + "/" + mainActivity);
+            adbCommand("shell", "am", "start", "-a", "android.intent.action.MAIN", "-n",
+                    app.getBasePackage() + "/" + mainActivity);
 
     String out = executeCommandQuietly(command);
     try {
@@ -166,7 +168,7 @@ public abstract class AbstractDevice implements AndroidDevice {
     }
     return out.contains("Starting: Intent");
   }
-  
+
   protected String executeCommandQuietly(CommandLine command) {
     return executeCommandQuietly(command, COMMAND_TIMEOUT);
   }
@@ -206,32 +208,12 @@ public abstract class AbstractDevice implements AndroidDevice {
       CommandLine command = adbCommand("shell", "am", "force-stop", aut.getBasePackage());
       executeCommandQuietly(command);
     } finally {
-      killProcesses(aut.getBasePackage());
       freeSelendroidPort();
     }
 
     if (logcatWatchdog != null && logcatWatchdog.isWatching()) {
       logcatWatchdog.destroyProcess();
       logcatWatchdog = null;
-    }
-  }
-
-  private void killProcesses(String packageName) {
-    CommandLine command = adbCommand("shell", "ps");
-    String processes = "";
-    try {
-      processes = ShellCommand.exec(command);
-    } catch (ShellCommandException e) {
-      String logMessage = String.format("Could not execute command: %s", command);
-      log.log(Level.WARNING, logMessage, e);
-    }
-
-    for (String process: processes.split("\\r\\n|\\r|\\n")) {
-      if (process.endsWith(packageName)) {
-        String pid = process.split("\\s+")[1];
-        command = adbCommand("shell", "run-as", packageName, "kill", pid);
-        executeCommandQuietly(command);
-      }
     }
   }
 
@@ -253,19 +235,24 @@ public abstract class AbstractDevice implements AndroidDevice {
     this.port = port;
 
     List<String> argList = Lists.newArrayList(
-        "-e", "main_activity", aut.getMainActivity(),
-        "-e", "server_port", Integer.toString(port));
+            "-e", "main_activity", aut.getMainActivity(),
+            "-e", "server_port", Integer.toString(port));
     if (capabilities.getSelendroidExtensions() != null) {
       argList.addAll(Lists.newArrayList("-e", "load_extensions", "true"));
       if (capabilities.getBootstrapClassNames() != null) {
         argList.addAll(Lists.newArrayList("-e", "bootstrap", capabilities.getBootstrapClassNames()));
       }
     }
+
+    if (capabilities.getAutomationName() != null) {
+      argList.addAll(Lists.newArrayList("-e", "automationName", capabilities.getAutomationName()));
+    }
+
     argList.add("io.selendroid." + aut.getBasePackage() + "/io.selendroid.server.ServerInstrumentation");
 
     String[] args = argList.toArray(new String[argList.size()]);
     CommandLine command
-        = adbCommand(ObjectArrays.concat(new String[]{"shell", "am", "instrument"}, args, String.class));
+            = adbCommand(ObjectArrays.concat(new String[]{"shell", "am", "instrument"}, args, String.class));
 
     String result = executeCommandQuietly(command);
     if (result.contains("FAILED")) {
@@ -274,12 +261,12 @@ public abstract class AbstractDevice implements AndroidDevice {
       try {
         // Try again, waiting for instrumentation to finish. This way we'll get more error output.
         String[] instrumentCmd =
-            ObjectArrays.concat(new String[]{"shell", "am", "instrument", "-w"}, args, String.class);
+                ObjectArrays.concat(new String[]{"shell", "am", "instrument", "-w"}, args, String.class);
         CommandLine getDetailedErrorCommand = adbCommand(instrumentCmd);
         String detailedResult = executeCommandQuietly(getDetailedErrorCommand);
         if (detailedResult.contains("package")) {
           detailedMessage =
-              genericMessage + " Is the correct app under test installed? Read the details below:\n" + detailedResult;
+                  genericMessage + " Is the correct app under test installed? Read the details below:\n" + detailedResult;
         } else {
           detailedMessage = genericMessage + " Read the details below:\n" + detailedResult;
         }
@@ -310,8 +297,8 @@ public abstract class AbstractDevice implements AndroidDevice {
       }
 
       throw new SelendroidException(
-          "Could not forward port: " + command + "\nList of forwarded ports:\n" + debugForwardList,
-          forwardException);
+              "Could not forward port: " + command + "\nList of forwarded ports:\n" + debugForwardList,
+              forwardException);
     }
   }
 
@@ -391,7 +378,7 @@ public abstract class AbstractDevice implements AndroidDevice {
     DefaultExecutor exec = new DefaultExecutor();
     exec.setStreamHandler(new PumpStreamHandler(logoutput));
     CommandLine command = adbCommand("logcat", "ResourceType:S", "dalvikvm:S", "Trace:S", "SurfaceFlinger:S",
-        "StrictMode:S", "ExchangeService:S", "SVGAndroid:S", "skia:S", "LoaderManager:S", "ActivityThread:S", "-v", "time");
+            "StrictMode:S", "ExchangeService:S", "SVGAndroid:S", "skia:S", "LoaderManager:S", "ActivityThread:S", "-v", "time");
     log.info("starting logcat:");
     log.fine(command.toString());
     try {
@@ -474,7 +461,7 @@ public abstract class AbstractDevice implements AndroidDevice {
     if (rawImage == null) return null;
 
     BufferedImage image =
-        new BufferedImage(rawImage.width, rawImage.height, BufferedImage.TYPE_3BYTE_BGR);
+            new BufferedImage(rawImage.width, rawImage.height, BufferedImage.TYPE_3BYTE_BGR);
 
     int index = 0;
     int IndexInc = rawImage.bpp >> 3;
@@ -541,7 +528,7 @@ public abstract class AbstractDevice implements AndroidDevice {
     // make sure it's backup again
     executeCommandQuietly(adbCommand("devices"));
   }
-  
+
   private CommandLine adbCommand() {
     CommandLine command = new CommandLine(AndroidSdk.adb());
     if (isSerialConfigured()) {
@@ -622,7 +609,7 @@ public abstract class AbstractDevice implements AndroidDevice {
   public String getModel() {
     return model;
   }
-  
+
   public String getAPITargetType() {
     return apiTargetType;
   }
