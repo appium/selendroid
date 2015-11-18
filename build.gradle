@@ -66,7 +66,6 @@ allprojects {
                 version {
                     name = selVersion
                     desc = selDescription
-
                     // https://github.com/bintray/gradle-bintray-plugin#buildgradle
                     // Uncomment and add maven credentials to sync the artifacts.
                     /* mavenCentralSync {
