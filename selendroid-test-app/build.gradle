@@ -22,6 +22,8 @@ dependencies {
     }
 }
 
+apply from: '../jacoco.gradle'
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion

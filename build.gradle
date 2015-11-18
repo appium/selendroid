@@ -11,6 +11,9 @@ buildscript {
         if (bintrayEnabled) {
             classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
         }
+        // Find latest version at https://bintray.com/bintray/jcenter/org.jacoco%3Ajacoco/view
+        // Remove once this android bug is fixed: https://code.google.com/p/android/issues/detail?id=192875
+        classpath 'org.jacoco:org.jacoco.core:0.7.5.201505241946'
     }
 }
 
@@ -26,7 +29,7 @@ allprojects {
 
     ext {
         // https://bintray.com/android/android-tools/com.android.tools.build.gradle/view
-        androidBuildToolsGradle = 'com.android.tools.build:gradle:1.3.1'
+        androidBuildToolsGradle = 'com.android.tools.build:gradle:1.5.0'
         // https://bintray.com/bintray/jcenter/com.jakewharton.sdkmanager:gradle-plugin
         sdkManager = 'com.jakewharton.sdkmanager:gradle-plugin:0.12.0'
         // https://bintray.com/bintray/jcenter/org.json%3Ajson/20090211/view
