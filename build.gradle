@@ -48,21 +48,34 @@ allprojects {
     if (bintrayEnabled) {
         apply plugin: 'com.jfrog.bintray'
         bintray {
+            publish = true
             configurations = ['published', 'archives']
             user = bintrayUser
             key = bintrayKey
             pkg {
                 repo = 'maven'
                 name = "${selGroup}:${selArtifactId}"
-                userOrg = 'appium'
+                // an userOrg of selendroid can be added here
+                // userOrg = 'appium'
                 websiteUrl = selWebsite
                 issueTrackerUrl = selTracker
                 vcsUrl = selGit
                 desc = selDescription
                 licenses = ['Apache-2.0']
+                publicDownloadNumbers = true
                 version {
                     name = selVersion
                     desc = selDescription
+
+                    // https://github.com/bintray/gradle-bintray-plugin#buildgradle
+                    // Uncomment and add maven credentials to sync the artifacts.
+                    /* mavenCentralSync {
+                        sync = true
+                        user = 'userToken' // OSS user token
+                        password = 'paasword' // OSS user password
+                        // Optional property. By default the staging repository is closed and artifacts are released to Maven Central. You can optionally turn this behaviour off (by puting 0 as value) and release the version manually.
+                        close = '1'
+                    } */
                 }
             }
         }
