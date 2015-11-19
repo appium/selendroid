@@ -35,7 +35,7 @@ import io.selendroid.server.util.Preconditions;
 import io.selendroid.server.util.SelendroidLogger;
 
 
-public class DefaultAppiumUiAutomatorDriver extends InstrumentationTestCase implements SelendroidDriver {
+public class DefaultAppiumUiAutomatorDriver implements SelendroidDriver {
 
     public static final String BROWSER_NAME = "browserName";
     public static final String PLATFORM = "platform";
@@ -55,7 +55,6 @@ public class DefaultAppiumUiAutomatorDriver extends InstrumentationTestCase impl
     private Session session = null;
 
 
-
     private UiDevice mDevice;
     private SelendroidWebDriver selendroidWebDriver = null;
 
@@ -67,16 +66,9 @@ public class DefaultAppiumUiAutomatorDriver extends InstrumentationTestCase impl
     }
 
     @Override
-    public AndroidElement findElement(By by)  {
-        try {
-            Thread.sleep(2000);
-            mDevice = UiDevice.getInstance(getInstrumentation());
-            mDevice.pressMenu();
-        }catch (Exception e)
-        {
-            throw new NoSuchMethodImplementationException("Exception in find element method ............!!!!");
-        }
-
+    public AndroidElement findElement(By by) {
+        mDevice = UiDevice.getInstance(serverInstrumentation);
+        mDevice.pressMenu();
         return null;
     }
 
