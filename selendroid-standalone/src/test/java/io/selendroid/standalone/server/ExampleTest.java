@@ -63,7 +63,7 @@ public class ExampleTest {
 
         driver = new SelendroidDriver(caps);
         WebElement inputField = driver.findElement(By.id("my_text_field"));
-        inputField.sendKeys("Anand Testing the Example");
+        inputField.sendKeys("Testing the Example");
     }
 
     @AfterClass
