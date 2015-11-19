@@ -38,7 +38,7 @@ public class ExampleTest {
     static {
         // NOTE: Must change path to be correct on your system if ANDROID_HOME
         // isn't defined.
-        AndroidSdk.ANDROID_HOME_PATH = "D://Appium_Aug26//adt-bundle-windows-x86_64-20131030//sdk";
+        AndroidSdk.ANDROID_HOME_PATH = "/path/to/android/home";
     }
 
     @BeforeClass
@@ -58,7 +58,7 @@ public class ExampleTest {
         selendroidServer.launchSelendroid(); // Null Pointer Exception
 
         SelendroidCapabilities caps = new SelendroidCapabilities();
-        caps.setAut("io.selendroid.testapp:0.17.0-SNAPSHOT");
+        caps.setAut("io.selendroid.testapp:0.18.0-SNAPSHOT");
         caps.setAutomationName("uiautomator");
 
         driver = new SelendroidDriver(caps);
@@ -68,12 +68,12 @@ public class ExampleTest {
 
     @AfterClass
     public static void stopSelendroidServer() {
-       /* if (driver != null) {
+        if (driver != null) {
             driver.quit();
         }
         if (selendroidServer != null) {
             selendroidServer.stopSelendroid();
-        }*/
+        }
     }
 
     @Test
