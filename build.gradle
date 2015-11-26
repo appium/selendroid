@@ -14,7 +14,7 @@ allprojects {
         json = 'org.json:json:20090211'
         seleniumVersion = '2.48.2'
         compileSdkVersion = 23
-        buildToolsVersion = '23.0.0'
+        buildToolsVersion = '23.0.2'
         minSdkVersion = 10
         targetSdkVersion = 16
         sourceCompatibilityVersion = 1.7
