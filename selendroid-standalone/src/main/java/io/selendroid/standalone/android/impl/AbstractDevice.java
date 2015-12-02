@@ -252,7 +252,7 @@ public abstract class AbstractDevice implements AndroidDevice {
 
     String[] args = argList.toArray(new String[argList.size()]);
     CommandLine command
-            = adbCommand(ObjectArrays.concat(new String[]{"shell", "am", "instrument", "-w"}, args, String.class));
+            = adbCommand(ObjectArrays.concat(new String[]{"shell", "am", "instrument"}, args, String.class));
 
     String result = executeCommandQuietly(command);
     if (result.contains("FAILED")) {
